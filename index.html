@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Relógio e Cronômetro</title>
+  </head>
+  <body>
+    <div
+      style="
+        text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 1em;
+      "
+    >
+      <h1>Relógio:</h1>
+      <h2
+        id="relogio"
+        style="
+          margin-left: 0.5em;
+          color: white;
+          font-size: 2em;
+          font-weight: bold;
+          font-family: Verdana, Geneva, Tahoma, sans-serif;
+          border: 1px solid black;
+          border-radius: 0.2em;
+          padding: 0.3em;
+          background-color: red;
+        "
+      ></h2>
+    </div>
+
+    <div style="text-align: center; margin-top: 2em">
+      <h1>Cronômetro:</h1>
+      <h2 id="cronometro" style="font-size: 2em">00:00:00</h2>
+      <div style="margin-top: 1em">
+        <button onclick="iniciar()">Iniciar</button>
+        <button onclick="pausar()">Pausar</button>
+        <button onclick="zerar()">Zerar</button>
+      </div>
+    </div>
+
+    <script>
+      function atualizarRelogio() {
+        const agora = new Date();
+        const horas = agora.getHours().toString().padStart(2, "0");
+        const minutos = agora.getMinutes().toString().padStart(2, "0");
+        const segundos = agora.getSeconds().toString().padStart(2, "0");
+
+        document.getElementById(
+          "relogio"
+        ).innerText = `${horas}:${minutos}:${segundos}`;
+      }
+
+      atualizarRelogio();
+      setInterval(atualizarRelogio, 1000);
+
+      // Cronômetro
+      let tempo = 0;
+      let intervalo = null;
+
+      function formatarTempo(tempo) {
+        const h = String(Math.floor(tempo / 3600)).padStart(2, "0");
+        const m = String(Math.floor((tempo % 3600) / 60)).padStart(2, "0");
+        const s = String(tempo % 60).padStart(2, "0");
+        return `${h}:${m}:${s}`;
+      }
+
+      function atualizarCronometro() {
+        tempo++;
+        document.getElementById("cronometro").innerText = formatarTempo(tempo);
+      }
+
+      function iniciar() {
+        if (intervalo) return; // Já está rodando
+        intervalo = setInterval(atualizarCronometro, 1000);
+      }
+
+      function pausar() {
+        clearInterval(intervalo);
+        intervalo = null;
+      }
+
+      function zerar() {
+        pausar();
+        tempo = 0;
+        document.getElementById("cronometro").innerText = "00:00:00";
+      }
+    </script>
+  </body>
+</html>
